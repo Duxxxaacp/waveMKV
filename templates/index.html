@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NekoGit</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .window {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 20px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Равномерное распределение */
+            margin-bottom: 20px;
+        }
+        .title-bar-controls {
+            display: flex;
+            gap: 8px; /* Расстояние между кружками */
+        }
+        .title-bar-controls span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .close { background-color: #ff5f56; } /* Красный кружок */
+        .minimize { background-color: #ffbd2e; } /* Желтый кружок */
+        .title {
+            font-size: 24px; /* Увеличенный размер заголовка */
+            font-weight: bold; /* Жирный шрифт */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Расстояние между текстом и значком */
+        }
+        .title .author {
+            font-size: 14px;
+            color: #888; /* Серый цвет для значка авторства */
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .form-group button {
+            padding: 8px 12px;
+            background-color: #007aff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
+            transition: background 0.3s ease;
+        }
+        .form-group button:hover {
+            background-color: #0063cc;
+        }
+        .form-group .folder-button {
+            margin-left: 10px;
+        }
+        .platform-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .platform-button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s ease, color 0.3s ease;
+            transform: scale(1); /* Фиксированный размер при нажатии */
+        }
+        .platform-button:active {
+            transform: scale(1); /* Фиксированный размер при нажатии */
+        }
+        .platform-button.github {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .platform-button.github:hover {
+            background-color: #161b22;
+        }
+        .platform-button.gitlab {
+            background-color: #f6f6f6;
+            color: #333;
+        }
+        .platform-button.gitlab:hover {
+            background-color: #e8e8e8;
+        }
+        .platform-button.active {
+            border: 2px solid #007aff; /* Обводка для активной кнопки */
+        }
+        .platform-button img {
+            margin-left: 8px;
+            height: 16px;
+        }
+
+        /* GitHub Theme */
+        .window.github {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .window.github .form-group input, .window.github .form-group select {
+            background-color: #161b22;
+            border-color: #30363d;
+            color: #c9d1d9;
+        }
+        .window.github .form-group button {
+            background-color: #238636;
+            color: #fff;
+        }
+        .window.github .form-group button:hover {
+            background-color: #2ea043;
+        }
+
+        /* GitLab Theme */
+        .window.gitlab {
+            background-color: #f6f6f6;
+            color: #333;
+        }
+        .window.gitlab .form-group input, .window.gitlab .form-group select {
+            background-color: #fff;
+            border-color: #ddd;
+            color: #333;
+        }
+        .window.gitlab .form-group button {
+            background-color: #fc6d26;
+            color: #fff;
+        }
+        .window.gitlab .form-group button:hover {
+            background-color: #e24329;
+        }
+    </style>
+</head>
+<body>
+    <div class="window github">
+        <div class="title-bar">
+            <div class="title">
+                NekoGit <span class="author">R</span> <!-- Значок авторства -->
+            </div>
+            <div class="title-bar-controls">
+                <span class="close"></span>
+                <span class="minimize"></span>
+                <!-- Удален зеленый кружок -->
+            </div>
+        </div>
+        <div class="platform-buttons">
+            <button class="platform-button github active" onclick="selectPlatform('github')">
+                GitHub
+                <img src="https://github.githubassets.com/favicons/favicon.png" alt="GitHub Logo">
+            </button>
+            <button class="platform-button gitlab" onclick="selectPlatform('gitlab')">
+                GitLab
+                <img src="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png" alt="GitLab Logo">
+            </button>
+        </div>
+        <div class="form-group">
+            <label>Personal Access Token:</label>
+            <div class="input-group">
+                <input type="text" placeholder="Введите токен">
+                <button>Сгенерировать PAT</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>ID проекта (GitLab) или имя репозитория (GitHub):</label>
+            <input type="text" placeholder="Введите ID или имя">
+        </div>
+        <div class="form-group">
+            <label>Путь к папке с проектом:</label>
+            <div class="input-group">
+                <input type="text" placeholder="Выберите папку">
+                <button class="folder-button">Выбрать папку</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Ветка:</label>
+            <select>
+                <option value="main">main</option>
+                <!-- Добавьте другие ветки при необходимости -->
+            </select>
+        </div>
+        <div class="form-group">
+            <button>Загрузить</button>
+        </div>
+    </div>
+
+    <script>
+        function selectPlatform(platform) {
+            const windowElement = document.querySelector('.window');
+            const githubButton = document.querySelector('.platform-button.github');
+            const gitlabButton = document.querySelector('.platform-button.gitlab');
+
+            if (platform === 'gitlab') {
+                windowElement.classList.remove('github');
+                windowElement.classList.add('gitlab');
+                githubButton.classList.remove('active');
+                gitlabButton.classList.add('active');
+            } else {
+                windowElement.classList.remove('gitlab');
+                windowElement.classList.add('github');
+                gitlabButton.classList.remove('active');
+                githubButton.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
